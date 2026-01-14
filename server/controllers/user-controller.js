@@ -40,9 +40,8 @@ exports.signin = async (req, res) => {
     res.cookie("token", accesToken, {
       maxAge: 1000 * 60 * 60 * 24 * 30,
       httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      partitioned: true,
+      sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
+      secure: process.env.NODE_ENV === "production" ? false : true,
     });
     res
       .status(201)
@@ -78,9 +77,8 @@ exports.login = async (req, res) => {
     res.cookie("token", accessToken, {
       maxAge: 1000 * 60 * 60 * 24 * 30,
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      partitioned: true,
+      secure: process.env.NODE_ENV === "production" ? false : true,
+      sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
     });
     res.status(200).json({ msg: "User logged in succcessfully !" });
   } catch (err) {
@@ -215,9 +213,8 @@ exports.logout = async (req, res) => {
     res.cookie("token", "", {
       maxAge: 0,
       httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      partitioned: true,
+      sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
+      secure: process.env.NODE_ENV === "production" ? false : true,
     });
 
     res.status(201).json({ msg: "You logged out !" });
